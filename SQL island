@@ -1,0 +1,58 @@
+SELECT * FROM INHABITANT
+
+SELECT * FROM inhabitant WHERE job = 'butcher'
+
+SELECT * FROM INHABITANT WHERE state = "friendly"
+
+SELECT * FROM INHABITANT WHERE state = "friendly" and  job = "weaponsmith"
+
+SELECT * FROM INHABITANT WHERE state = "friendly" and  job like  "%smith"
+
+SELECT personid FROM INHABITANT WHERE name like "stranger"
+
+SELECT gold FROM INHABITANT WHERE  name like "stranger"
+
+SELECT * FROM ITEM WHERE owner is  NULL
+
+UPDATE item SET owner = 20 WHERE owner is NULL
+
+SELECT * FROM ITEM WHERE owner = "20"
+
+SELECT * FROM INHABITANT WHERE state = "friendly"  and job = "dealer" or job = "merchant"
+
+
+UPDATE item SET owner = 15 WHERE owner = "20"
+
+UPDATE inhabitant SET gold = gold + 120 WHERE personid = 20
+
+UPDATE INHABITANT SET name = "Santi"
+
+SELECT * FROM INHABITANT WHERE job = "baker"
+
+SELECT * FROM INHABITANT WHERE job = "baker" order by gold desc
+
+UPDATE inhabitant SET gold = gold + 100 - 150 WHERE personid = 20
+
+INSERT INTO item (item, owner) VALUES ('sword', 20)
+
+SELECT * FROM INHABITANT WHERE job = "pilot" 
+
+SELECT village.name FROM village, inhabitant WHERE village.villageid = inhabitant.villageid AND inhabitant.name = 'Dirty Dieter'
+
+select i.name from inhabitant i
+INNER JOIN village v ON i.personid = v.chief
+WHERE v.name = 'Onionville'
+
+select COUNT (i.name) from inhabitant i
+INNER JOIN village v ON i.villageid = v.villageid
+WHERE i.gender = 'f' and v.name = "Onionville"
+
+
+select i.name from inhabitant i
+INNER JOIN village v ON i.villageid = v.villageid
+WHERE i.gender = 'f' and v.name = "Onionville"
+
+
+select SUM (I.gold) from inhabitant i
+WHERE i.job = 'baker' or i.job = "dealer"
+or i.job = "merchant"
