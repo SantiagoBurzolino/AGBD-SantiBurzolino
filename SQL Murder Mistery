@@ -1,0 +1,102 @@
+select * from crime_scene_report WHERE date = "20180115" AND type = "murder" AND city like "sql city"
+
+select * from person WHERE address_street_name = "Northwestern Dr" ORDER BY address_number DESC
+
+Select * from person WHERE name like "Annabel%" AND  address_street_name = "Franklin Ave"
+    
+Select * from person WHERE name like "Morty schapiro" AND  address_street_name = "Northwestern Dr"
+
+Select * from drivers_license WHERE id = "490173"    
+
+
+
+select * from facebook_event_checkin WHERE person_id = 16371
+
+select * from interview WHERE person_id = 16371
+
+select * from get_fit_now_check_in WHERE membership_id = 90081
+
+select * from Person p
+INNER JOIN get_fit_now_member g on g.person_id = p.id
+INNER JOIN get_fit_now_check_in c 
+WHERE p.name like "Annabel%" 
+
+select * from Person p
+INNER JOIN get_fit_now_member g on g.person_id = p.id
+INNER JOIN get_fit_now_check_in c on g.id = c.membership_id
+WHERE p.name like "Annabel%" 
+ 
+
+select * from Person p
+INNER JOIN get_fit_now_member g on g.person_id = p.id
+INNER JOIN get_fit_now_check_in c on g.id = c.membership_id
+INNER JOIN drivers_license d on p.license_id = d.id
+INNER JOIN interview i on p.id = i.person_id
+WHERE p.name like "Annabel%"
+
+
+
+select * from Person p
+INNER JOIN get_fit_now_member g on g.person_id = p.id
+INNER JOIN get_fit_now_check_in c on g.id = c.membership_id
+INNER JOIN drivers_license d on p.license_id = d.id
+INNER JOIN interview i on p.id = i.person_id
+WHERE p.name like "Morty%"
+
+id	    name	        license_id	address_number	address_street_name	ssn	            id	   person_id	    name	    membership_start_date	membership_status	membership_id	check_in_date	check_in_time	check_out_time	  id	age	  height	eye_color	hair_color	gender	plate_number	car_make	car_model	person_id	transcript
+16371	Annabel Miller	490173	        103	            Franklin Ave	318771143	  90081	    16371	    Annabel Miller	    20160208	                gold	          90081	        20180109	     1600	         1700	    490173	35	    65	      green	       brown	female	23AM98	         Toyota	       Yaris	  16371	    I saw the murder happen, 
+and I recognized the killer from my gym when I was working out last week on January the 9th.
+
+Morty:
+id	name	license_id	address_number	address_street_name	ssn	id	age	height	eye_color	hair_color	gender	plate_number	car_make	car_model	person_id	transcript
+14887	Morty Schapiro	118009	4919	Northwestern Dr	111564949	118009	64	84	blue	white	male	00NU00	Mercedes-Benz	E-Class	14887	I heard a gunshot and then saw a man run out. He had a "Get Fit Now Gym" bag. The membership number on the bag started with "48Z". 
+Only gold members have those bags. The man got into a car with a plate that included "H42W".
+
+
+sospechoso (no era)
+  id	age	    height	  eye_color	    hair_color	gender	plate_number	car_make	car_model
+183779	21	      65	     blue 	      blonde	female	    H42W0X	      Toyota       Prius
+
+id	        name	    license_id	address_number	address_street_name	      ssn
+78193	Maxine Whitely	183779	        110	              Fisk Rd	        137882671
+
+select * from get_fit_now_member WHERE membership_status like "48Z%"
+
+select * from get_fit_now_member WHERE id like "48Z%" order by membership_start_date asc
+
+
+select * from get_fit_now_member WHERE id like "48Z%" order by membership_start_date asc
+limit 1
+
+
+sospechoso2
+id	person_id	name	membership_start_date	membership_status
+48Z55	67318	Jeremy Bowers	20160101	gold
+
+select * from person WHERE id = 67318  
+
+id	name	license_id	address_number	address_street_name	ssn
+67318	Jeremy Bowers	423327	530	Washington Pl, Apt 3A	871539279
+
+select * from drivers_license WHERE id = 423327  
+
+id	age	height	eye_color	hair_color	gender	plate_number	car_make	car_model
+423327	30	70	brown	brown	male	0H42W2	Chevrolet	Spark LS
+
+select * from Person p
+INNER JOIN get_fit_now_member g on g.person_id = p.id
+INNER JOIN get_fit_now_check_in c on g.id = c.membership_id
+INNER JOIN drivers_license d on p.license_id = d.id
+INNER JOIN interview i on p.id = i.person_id
+WHERE p.name like "Jeremy%"  
+
+id	name	license_id	address_number	address_street_name	ssn	id	person_id	name	membership_start_date	membership_status	membership_id	check_in_date	check_in_time	check_out_time	id	age	height	eye_color	hair_color	gender	plate_number	car_make	car_model	person_id	transcript
+67318	Jeremy Bowers	423327	530	Washington Pl, Apt 3A	871539279	48Z55	67318	Jeremy Bowers	20160101	gold	48Z55	20180109	1530	1700	423327	30	70	brown	brown	male	0H42W2	Chevrolet	Spark LS	67318	I was hired by a woman with a lot of money. I don't know 
+her name but I know she's around 5'5" (65") or 5'7" (67"). She has red hair and she drives a Tesla Model S. I know that she attended the SQL Symphony Concert 3 times in December 2017. 
+
+
+INSERT INTO solution VALUES (1, 'Jeremy Bowers');
+        
+        SELECT value FROM solution;
+
+  Asesino: Jeremy Bowers      
