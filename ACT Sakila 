@@ -1,0 +1,68 @@
+select * from film f
+
+
+
+select * from film f
+INNER JOIN inventory i on f.film_id = i.film_id
+INNER JOIN store s on i.store_id = s.store_id
+select * from film f
+INNER JOIN inventory i on f.film_id = i.film_id
+INNER JOIN store s on i.store_id = s.store_id
+INNER JOIN address a on s.address_id = a.address_id  
+INNER JOIN city c on a.city_id = c.city_id
+INNER JOIN country co on c.country_id = co.country_id
+
+select f.title, a.address, c.city, co.country from film f
+INNER JOIN inventory i on f.film_id = i.film_id
+INNER JOIN store s on i.store_id = s.store_id
+INNER JOIN address a on s.address_id = a.address_id
+INNER JOIN city c on a.city_id = c.city_id
+INNER JOIN country co on c.country_id = co.country_id
+WHERE f.title = 'ACE GOLDFINGER' 
+
+
+select f.title, l.name, f.rating, f.length from film f
+INNER JOIN film_category fi on f.film_id = fi.film_id
+INNER JOIN language l on l.language_id = f.language_id
+INNER JOIN category ca on fi.category_id = ca.category_id
+WHERE f.length BETWEEN 60 AND 120 --el between sirve para poner un minimo y maximo de tiempo o de que quieras buscar en la lista--
+
+
+select st.first_name, st.last_name,st.address_id,  c.city, co.country from film f
+INNER JOIN inventory i on f.film_id = i.film_id
+INNER JOIN store s on i.store_id = s.store_id
+INNER JOIN city c on a.city_id = c.city_id
+INNER JOIN country co on c.country_id = co.country_id
+INNER JOIN address a on s.address_id = a.address_id
+INNER JOIN staff st on a.address_id = st.address_id
+
+
+
+select f.title, min(return_date) AS 'fecha_min', max(rental_date) AS 'fecha_max' from film f --el AS sirve para renombrar algo que quieras tener. el min y el max sirve para poner un minimo de fecha o numero  y el maximo sirve para poner un maximo de fecha o numero entre los () va lo que quieras mostrar en este caso la columna de la fecha de inicio  y la fecha cuando se tiene q entegar--
+INNER JOIN inventory i on f.film_id = i.film_id
+INNER JOIN rental r on i.store_id = r.rental_id
+
+
+
+--si se puede unir todas las tablas pero son muchos inner join--
+
+select * from film f
+INNER JOIN inventory i on f.film_id = i.film_id
+INNER JOIN rental r on i.store_id = r.rental_id
+INNER JOIN store s on i.store_id = s.store_id
+INNER JOIN city c on a.city_id = c.city_id
+INNER JOIN country co on c.country_id = co.country_id
+INNER JOIN address a on s.address_id = a.address_id
+INNER JOIN staff st on a.address_id = st.address_id
+INNER JOIN film_category fi on f.film_id = fi.film_id
+INNER JOIN language l on l.language_id = f.language_id
+INNER JOIN category ca on fi.category_id = ca.category_id
+INNER JOIN film_category fi on f.film_id = fi.film_id
+INNER JOIN payment p  on cu.customer_id = p.payment_id
+INNER JOIN customer cu on a.address_id = cu.address_id
+INNER JOIN film_text fil  on i.film_id = fil.film_id
+INNER JOIN film_actor ac on f.film_id = ac.film_id
+INNER JOIN actor act on ac.actor_id = act.actor_id
+
+
+
