@@ -128,3 +128,83 @@ FROM  film f
 INNER JOIN inventory i on i.film_id = f.film_id
 INNER JOIN rental r on r.inventory_id = i.inventory_id
 WHERE f.title = 'ALABAMA DEVIL' 
+/*
+13)Nombre, duración y categoria de todas
+ las peliculas ordenados del más largo al más corto.
+*/ 
+SELECT 
+    f.title AS nombre_pelicula,
+    f.length AS duracion_minutos,
+    c.name AS categoria
+FROM film f
+JOIN film_category fc ON f.film_id = fc.film_id
+JOIN category c ON fc.category_id = c.category_id
+ORDER BY f.length DESC;
+/*
+14)Nombre de las peliculas que arranquen
+‘’w’’ con al menos 5 actores.
+*/ 
+SELECT f.title, count(fc.actor_id) as num_actor from film f
+INNER JOIN film_actor fc on fc.film_id = f.film_id
+WHERE f.title like "w%"
+GROUP by fc.actor_id
+HAVING num_actor >= 5
+
+/*
+CONCAT:se usa para unir dos o más cadenas de texto en una sola.(como unir dos letras de una tabla distinta en una sola)
+COUNT:
+*/
+/*
+15)
+*/
+SELECT   c.first_name, c.last_name,  sum(p.amount) as Suma_Total FROM payment p
+INNER JOIN customer c on p.customer_id = c.customer_id
+GROUP BY  c.first_name
+/*
+16)
+*/
+SELECT  f.title,  f.length, ac.first_name, ac.last_name FROM film f
+INNER JOIN film_actor fi on fi.film_id = f.film_id
+INNER JOIN actor ac on ac.actor_id = fi.actor_id
+WHERE f.length < 47
+/*
+17)
+*/
+SELECT c.last_name, ci.city,a.address,  co.country, r.rental_date, sum(p.amount) FROM customer c
+INNER JOIN address a on a.address_id = c.address_id
+INNER JOIN city ci on ci.city_id = a.city_id
+INNER JOIN country co on co.country_id = ci.country_id
+INNER JOIN rental r on r.customer_id = c.customer_id
+INNER JOIN payment p on p.staff_id = r.staff_id
+ORDER BY  p.amount ASC
+/*
+18)
+*/
+INSERT INTO actor(actor_id,first_name,last_name,last_update)
+values(201,"Santiago","Burzolino","2025-10-26 04:17:17" )
+/*
+19)
+*/
+INSERT INTO actor(actor_id,first_name,last_name,last_update)
+values(202,"ELpi","Tito","2025-02-23 20:15:03"),(203,"Lamela","Torres","2025-02-23 20:16:30")
+/*
+20)
+*/
+UPDATE actor
+SET first_name = "Brad",last_name =  "Pitt",last_update = "2026-02-23 10:12:07" 
+WHERE actor_id = 201 
+UPDATE actor
+SET first_name = "Jason",last_name =  "Vorgues",last_update = "2023-06-16 11:13:17" 
+WHERE actor_id = 202
+UPDATE actor
+SET first_name = "Freddy",last_name =  "Mercury",last_update = "2021-08-20 09:08:06" 
+WHERE actor_id = 203
+/*
+21)
+*/
+DELETE actor
+WHERE actor_id = 201
+DELETE actor
+WHERE actor_id = 202
+DELETE actor
+WHERE actor_id = 203
