@@ -10,77 +10,94 @@ INSERT INTO categoria(nombre) VALUES
 CREATE TABLE proveedores (
     proveedor_Id INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre VARCHAR(40) NOT NULL,
-    stock VARCHAR(10),
+    stock INTEGER NOT NULL,
     tel VARCHAR(20),
     gmail VARCHAR(30) UNIQUE,
     precioProducto VARCHAR(30),
+    marca VARCHAR(50) NOT NULL,
     empleado_Id INTEGER NOT NULL,
     producto_Id INTEGER NOT NULL,
     FOREIGN KEY(empleado_Id) REFERENCES empleados(empleado_Id) ,
     FOREIGN KEY(producto_Id) REFERENCES productos(producto_Id)
 );
 
+INSERT INTO proveedores(proveedor_Id, nombre, stock, tel, gmail, precioProducto,
+ marca, empleado_Id, producto_Id) VALUES
+('1', 'MisterClass', 50000, '11-5859-4031', 'MisterClass1@gmail.com', 'Coca cola'); 
+
 CREATE TABLE productos (
     producto_Id INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre VARCHAR(40) NOT NULL,
     precio INTEGER,
     stock VARCHAR(50),
-    sinStock VARCHAR(45),
-    fechaVencimiento VARCHAR(40),
     empleado_Id INTEGER NOT NULL,
     categoria_Id INTEGER NOT NULL,
     promo_Id INTEGER NOT NULL,
     cliente_Id INTEGER NOT NULL,
-    marca_Id INTEGER NOT NULL,
-    FOREIGN KEY(empleado_Id) REFERENCES empleados(empleado_Id) ,
+    FOREIGN KEY(empleado_Id) REFERENCES empleados(empleado_Id),
     FOREIGN KEY(cliente_Id) REFERENCES cliente(cliente_Id),
     FOREIGN KEY(promo_Id) REFERENCES promociones(promo_Id) ,
-    FOREIGN KEY(categoria_Id) REFERENCES categoria(categoria_Id),
-    FOREIGN KEY(marca_Id) REFERENCES marcas(marca_Id)
+    FOREIGN KEY(categoria_Id) REFERENCES categoria(categoria_Id)
 );
 
-INSERT INTO productos (nombre, precio, stock, sinStock, fechaVencimiento, 
-empleado_Id, categoria_Id, promo_Id, cliente_Id, marca_Id) VALUES
-('Pan Lactal Blanco Grande', '950.00', '30', 'No', '2025-06-10');
+INSERT INTO productos (producto_Id, nombre, precio, stock, empleado_Id, categoria_Id, promo_Id, 
+cliente_Id, marca_Id) VALUES
+('1', 'Pan Lactal Bimbo Blanco Grande ', '950.00', '30'),
+('2','Gaseosa coca cola sabor original', '830.00', '30');
 
 CREATE TABLE empleados (
     empleado_Id INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre VARCHAR(40) NOT NULL,
     apellido VARCHAR(50),
     puesto VARCHAR(45),
-    tiempoTrabajado VARCHAR(50) UNIQUE,
-    fechaVencimiento VARCHAR(40)
+    rol_Id INTEGER NOT NULL,
+    FOREIGN KEY(rol_Id) REFERENCES roles(rol_Id)
 );
+
+INSERT INTO empleados (empleado_Id, nombre, apellido, puesto, rol_Id) VALUES
+('1', 'Juan Manuel', 'Parrado', 'Encargado', 2),
+('2', 'Diego', 'Ajata Ledezma', 'Empleado De caja', 3);
+
+
 
 CREATE TABLE cliente (
     cliente_Id INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre VARCHAR(40) NOT NULL,
-    apellido VARCHAR(50),
-    dni VARCHAR(45),
-    email VARCHAR(50) UNIQUE,
+    apellido VARCHAR(50) NOT NULL,
+    dni INTEGER NOT NULL UNIQUE,
+    email VARCHAR(50) NOT NULL,
 	empleado_Id INTEGER NOT NULL,
     FOREIGN KEY(empleado_Id) REFERENCES empleados(empleado_Id)
 );
 
+INSERT INTO cliente(cliente_Id, nombre, apellido, dni, email, empleado_Id) VALUES
+('5', 'mario', 'josema', 38-172-986, 'mariojosemaa2@gmail.com', );
+
 CREATE TABLE ventas (
     venta_Id INTEGER PRIMARY KEY AUTOINCREMENT,
-    fecha_hora VARCHAR(40) NOT NULL,
-    pago_Id VARCHAR(50),
-    dni VARCHAR(45),
+    totalVentas INTEGER,
+    pago_Id INTEGER NOT NULL,
     promo_Id INTEGER NOT NULL,
 	empleado_Id INTEGER NOT NULL,
     FOREIGN KEY(empleado_Id) REFERENCES empleados(empleado_Id),
-    FOREIGN KEY(promo_Id) REFERENCES promociones(promo_Id)
+    FOREIGN KEY(promo_Id) REFERENCES promociones(promo_Id),
+    FOREIGN KEY(pago_Id) REFERENCES pagos(pago_Id)
 );
+
+INSERT INTO ventas (venta_Id ,totalVentas, empleado_Id, pago_Id, metodoPago_Id, promo_Id)
+VALUES ('1', '', 5, 1, 2, 3);
 
 CREATE TABLE pagos (
     pago_Id INTEGER PRIMARY KEY AUTOINCREMENT,
     total VARCHAR(40) NOT NULL,
+    pago VARCHAR(40) UNIQUE NOT NULL,
     metodoPago_Id INTEGER NOT NULL,
-	producto_Id INTEGER NOT NULL,
+    producto_Id INTEGER NOT NULL,
     FOREIGN KEY(producto_Id) REFERENCES productos(producto_Id),
-    FOREIGN KEY(metodoPago_Id) REFERENCES metodoPago(metodoPago_Id)
+    FOREIGN KEY(metodoPago_Id) REFERENCES metodos_pago(metodoPago_Id)
 );
+
+
 
 CREATE TABLE roles (
     rol_Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -89,23 +106,31 @@ CREATE TABLE roles (
     FOREIGN KEY(empleado_Id) REFERENCES empleados(empleado_Id)
 );
 
-CREATE TABLE metodoPago (
-    metodoPago_Id INTEGER PRIMARY KEY AUTOINCREMENT,
-    pago VARCHAR(40) UNIQUE NOT NULL,
-    visa VARCHAR(40),
-    mastercard VARCHAR(40)
-);
+INSERT INTO roles(rol_Id, rolName, nombre, empleado_Id) VALUES
+('2', 'encargado', 'Juan Manuel', , 1),
+('3', 'empleado de caja', 'diego', 2);
+
 
 CREATE TABLE promociones (
     promo_Id INTEGER PRIMARY KEY AUTOINCREMENT,
-    dni VARCHAR(40) UNIQUE NOT NULL,
-    compras_hechas VARCHAR(40),
+    nombre VARCHAR(40),
+    dni INTEGER UNIQUE NOT NULL,
     cliente_Id INTEGER NOT NULL,
     FOREIGN KEY(cliente_Id) REFERENCES cliente(cliente_Id)
 );
 
-CREATE TABLE marcas (
-    marca_Id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nombre VARCHAR(40) UNIQUE NOT NULL,
-    precios VARCHAR(40)
+INSERT INTO promociones(promo_Id, nombre, dni, cliente_Id) VALUES
+('30', 'descuentos en productos de limpieza', 38-172-986, '5')
+
+CREATE TABLE metodos_pago (
+  metodoPago_Id INTEGER PRIMARY KEY AUTOINCREMENT,
+  nombre VARCHAR(50) NOT NULL -- ej: 'Efectivo', 'Transferencia', 'Tarjeta de crédito'
 );
+
+INSERT INTO metodos_pago (nombre)
+VALUES 
+  ('Efectivo'),
+  ('Transferencia'),
+  ('Tarjeta de débito'),
+  ('Tarjeta de crédito'),
+  ('MercadoPago');
