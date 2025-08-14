@@ -90,14 +90,14 @@ VALUES ('1', '', 5, 1, 2, 3);
 CREATE TABLE pagos (
     pago_Id INTEGER PRIMARY KEY AUTOINCREMENT,
     total VARCHAR(40) NOT NULL,
-    pago VARCHAR(40) UNIQUE NOT NULL,
-    metodoPago_Id INTEGER NOT NULL,
+    metodoPago VARCHAR(30) NOT NULL,
     producto_Id INTEGER NOT NULL,
     FOREIGN KEY(producto_Id) REFERENCES productos(producto_Id),
     FOREIGN KEY(metodoPago_Id) REFERENCES metodos_pago(metodoPago_Id)
 );
 
-
+INSERT INTO pagos (pago_Id, total, metodoPago_Id, producto_Id )
+VALUES ('2', '200 pesos', 'Transferencia', '2' )
 
 CREATE TABLE roles (
     rol_Id INTEGER PRIMARY KEY AUTOINCREMENT,
