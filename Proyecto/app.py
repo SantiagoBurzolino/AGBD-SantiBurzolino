@@ -1,7 +1,10 @@
 from flask import Flask
 from routes.inventario import inventario_bp
 from routes.auth import auth_bp
-from routes/miembros import miembros_bp
+from routes.miembros import miembros_bp
+from flask_cors import CORS
+
+
 
 app = Flask(__name__)
 
