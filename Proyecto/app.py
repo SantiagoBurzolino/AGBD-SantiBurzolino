@@ -2,6 +2,7 @@ from flask import Flask
 from routes.inventario import inventario_bp
 from routes.auth import auth_bp
 from routes.miembros import miembros_bp
+from routes.aportes import aportes_bp
 from flask_cors import CORS
 
 
@@ -12,6 +13,8 @@ app = Flask(__name__)
 app.register_blueprint(inventario_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(miembros_bp)
+app.register_blueprint(aportes_bp)
+
 
 @app.route("/")
 def index():
