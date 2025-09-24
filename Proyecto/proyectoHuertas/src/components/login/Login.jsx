@@ -1,4 +1,6 @@
 import { useState } from "react";
+import "./Login.css"; // 👈 importa el CSS
+
 
 function Login() {
   // Estados para guardar lo que escribe el usuario
@@ -61,11 +63,11 @@ function Login() {
 
       {/* Link de WhatsApp del admin */}
       <a
-        href="https://wa.me/5491112345678"
+        href="https://wa.me/5491161304846"
         target="_blank"
         rel="noopener noreferrer"
       >
-        Contactar Admin por WhatsApp
+        ¿Quieres participar de la huerta?
       </a>
 
       {/* Mensajes (error o bienvenida) */}

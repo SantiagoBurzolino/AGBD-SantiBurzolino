@@ -1,7 +1,6 @@
 import mysql.connector
 
 
-app = Flask(__name__)
 
 # Configuración de conexión con MySQL
 config = {

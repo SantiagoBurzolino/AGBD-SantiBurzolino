@@ -1,0 +1,66 @@
+/* Fondo general */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #1e3c72, #2a5298); /* degradado */
+  color: #fff;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Contenedor del login */
+.login-container {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  width: 350px;
+  text-align: center;
+}
+
+/* Título */
+.login-container h2 {
+  margin-bottom: 20px;
+  color: #f1f1f1;
+}
+
+/* Inputs */
+.login-container input {
+  width: 90%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
+
+/* Botón */
+.login-container button {
+  width: 100%;
+  padding: 10px;
+  background: #4cafef;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-container button:hover {
+  background: #368fde;
+}
+
+/* Link de registro */
+.login-container a {
+  display: block;
+  margin-top: 15px;
+  color: #61dafb;
+  text-decoration: none;
+}
+
+.login-container a:hover {
+  text-decoration: underline;
+}

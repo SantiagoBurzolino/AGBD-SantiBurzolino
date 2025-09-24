@@ -8,6 +8,7 @@ from flask_cors import CORS
 
 
 app = Flask(__name__)
+CORS(app)
 
 # Registramos los blueprints
 app.register_blueprint(inventario_bp)
