@@ -1,0 +1,51 @@
+/* Fondo de la página */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #2a5298, #1e3c72); /* Degradado verde-azul */
+  color: #fff;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* Contenedor principal */
+.home-container {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  width: 350px;
+  text-align: center;
+}
+
+/* Título de la página de inicio */
+.home-container h1 {
+  margin-bottom: 20px;
+  color: #f1f1f1;
+}
+
+/* Mensajes */
+.home-container p {
+  color: #ddd;
+  margin-top: 10px;
+}
+
+/* Botón de navegación o acción */
+.home-container button {
+  width: 100%;
+  padding: 10px;
+  background: #4cafef;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.home-container button:hover {
+  background: #368fde;
+}

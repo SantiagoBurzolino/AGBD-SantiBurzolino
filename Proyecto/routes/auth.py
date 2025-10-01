@@ -7,12 +7,14 @@ auth_bp = Blueprint('auth', __name__)
 # =====================
 # LOGIN
 # =====================
+
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.json
     email = data['email']
     password = data['password']
 
+    # Conexión a la base de datos
     db = get_db()
     cursor = db.cursor(dictionary=True)
     cursor.execute("SELECT miembro_id, nombre, password, rol_id FROM miembros WHERE email=%s", (email,))
@@ -20,14 +22,16 @@ def login():
     cursor.close()
     db.close()
 
-    if user and password:
+    # Verificar si el usuario existe y si la contraseña coincide con el hash
+    if user and check_password_hash(user['password'], password):
+        # Si las credenciales son correctas
         return jsonify({
             "miembro_id": user['miembro_id'],
             "nombre": user['nombre'],
             "rol_id": user['rol_id'],
-            
         })
     else:
+        # Si las credenciales son incorrectas
         return jsonify({"error": "Credenciales incorrectas"}), 401
 
 
