@@ -1,4 +1,4 @@
-import "./Home.css"; // Importamos los estilos
+import "./HomeUser.css"; // Importamos los estilos
 
 function HomeUser() {
   return (
@@ -6,6 +6,7 @@ function HomeUser() {
       <h1>Bienvenido a la Huerta</h1>
       <p>Aquí podrás ver tus aportes y participar en actividades.</p>
       <button>Ver Aportes</button>
+      <button>Realizar Aporte</button>
     </div>
   );
 }

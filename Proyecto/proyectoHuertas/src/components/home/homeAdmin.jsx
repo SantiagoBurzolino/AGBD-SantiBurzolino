@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./Home.css"; // Importamos los estilos
+import "./HomeAdmin.css"; // Importamos los estilos
 
 function AdminHome() {
   const [nombre, setNombre] = useState("");
@@ -33,27 +33,44 @@ function AdminHome() {
     <div className="home-container">
       <h1>Panel Admin</h1>
       <form onSubmit={handleCrearUsuario}>
-        <label>Nombre</label>
-        <input
-          type="text"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          required
-        />
-        <label>Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <label>Contraseña</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <div>
+            <div>
+                <label htmlFor="name" className={""}>Nombre</label>
+                <input
+                type="text"
+                id="name"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                required
+                />
+            </div>
+        </div>
+        <div>
+            <div>
+                <label htmlFor="email">Email</label>
+                <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                />
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <label htmlFor="password">Contraseña</label>
+                <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                />
+            </div>
+        </div>
+
         <button type="submit">Crear Usuario</button>
       </form>
 
