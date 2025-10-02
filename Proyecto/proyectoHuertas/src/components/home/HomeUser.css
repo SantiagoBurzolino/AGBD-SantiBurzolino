@@ -53,3 +53,35 @@ body {
 .home-container button:hover {
   background: #368fde;
 }
+
+
+/* Barra superior */
+.navbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: #1e3c72;
+  padding: 10px 20px;
+  color: white;
+  font-weight: bold;
+}
+
+/* Nombre del usuario */
+.user-info {
+  margin-right: 15px;
+}
+
+/* Botón cerrar sesión */
+.logout-btn {
+  background-color: #e63946;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.logout-btn:hover {
+  background-color: #d62828;
+}

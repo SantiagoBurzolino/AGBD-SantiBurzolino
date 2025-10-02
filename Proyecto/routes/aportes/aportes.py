@@ -20,11 +20,29 @@ def obtener_aportes():
 def obtener_aportes_por_miembro(miembro_id):
     db = get_db()
     cursor = db.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM aportes WHERE miembro_id = %s;", (miembro_id,))
+
+    consulta = """
+        SELECT a.id,
+               m.nombre,
+               m.apellido,
+               t.nombre AS tipo_aporte,
+               a.descripcion,
+               a.cantidad,
+               a.fecha_aporte
+        FROM aportes a
+        JOIN miembros m ON a.miembro_id = m.id
+        JOIN tipos_aporte t ON a.tipo_aporte_id = t.id
+        WHERE a.miembro_id = %s
+        ORDER BY a.fecha_aporte DESC;
+    """
+
+    cursor.execute(consulta, (miembro_id,))
     resultados = cursor.fetchall()
     cursor.close()
     db.close()
     return jsonify(resultados)
+
+
 
 # Crear un nuevo aporte (usuario)
 @aportes_bp.route("/api/aportes", methods=["POST"])

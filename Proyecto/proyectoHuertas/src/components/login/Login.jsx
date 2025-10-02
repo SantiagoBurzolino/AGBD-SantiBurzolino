@@ -33,6 +33,16 @@ function Login() {
     } catch (error) {
       setMensaje("Error en el servidor");
     }
+      // Guardar los datos en localStorage
+      localStorage.setItem("miembro_id", data.miembro_id);
+      localStorage.setItem("nombre", data.nombre);
+      localStorage.setItem("rol_id", data.rol_id);
+
+     if (data.rol_id === 1) {
+        navigate("/admin-home");
+      } else {
+        navigate("/user-home");
+      }
   };
 
   return (

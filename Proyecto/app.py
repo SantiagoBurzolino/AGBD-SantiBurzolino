@@ -2,7 +2,7 @@ from flask import Flask
 from routes.inventario import inventario_bp
 from routes.auth import auth_bp
 from routes.miembros import miembros_bp
-from routes.aportes import aportes_bp
+from routes.aportes.aportes import aportes_bp
 from flask_cors import CORS
 
 
