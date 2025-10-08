@@ -1,87 +1,189 @@
 /* Fondo de la página */
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #2a5298, #1e3c72); /* Degradado verde-azul */
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(135deg, #2a5298, #1e3c72);
   color: #fff;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
 }
 
 /* Contenedor principal */
 .home-container {
-  background: rgba(0, 0, 0, 0.6);
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  width: 350px;
+  background: rgba(0, 0, 0, 0.75);
+  padding: 40px 32px;
+  border-radius: 20px;
+  box-shadow: 0 12px 32px rgba(30, 60, 114, 0.45);
+  max-width: 480px;
+  width: 100%;
   text-align: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 10px;
+  gap: 24px;
+  margin: 32px auto;
+  transition: box-shadow 0.3s;
 }
 
-/* Título de la página de inicio */
+.home-container:hover {
+  box-shadow: 0 16px 40px rgba(30, 60, 114, 0.55);
+}
+
+/* Título */
 .home-container h1 {
-  margin-bottom: 20px;
+  margin-bottom: 8px;
+  font-size: 2.2rem;
   color: #f1f1f1;
+  letter-spacing: 1.5px;
+  font-weight: 700;
 }
 
-/* Mensajes */
+/* Subtítulo */
 .home-container p {
-  color: #ddd;
-  margin-top: 10px;
+  color: #cfd8dc;
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 1.08rem;
 }
 
-/* Botón de acción */
-.home-container button {
+/* Botones */
+.home-container button,
+.button {
   width: 100%;
-  padding: 10px;
-  background: #4cafef;
+  padding: 14px;
+  background: linear-gradient(90deg, #4cafef 60%, #368fde 100%);
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   color: white;
-  font-size: 16px;
+  font-size: 1.08rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: 0.3s;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(54, 143, 222, 0.18);
 }
 
-.home-container button:hover {
-  background: #368fde;
+.home-container button:hover,
+.button:hover {
+  background: linear-gradient(90deg, #368fde 60%, #4cafef 100%);
+  box-shadow: 0 4px 16px rgba(54, 143, 222, 0.28);
+  transform: translateY(-2px) scale(1.03);
 }
-
 
 /* Barra superior */
 .navbar {
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  background-color: #1e3c72;
-  padding: 10px 20px;
-  color: white;
-  font-weight: bold;
-}
-
-/* Nombre del usuario */
-.user-info {
-  margin-right: 15px;
+  flex-direction: column;
+  gap: 18px;
+  background: transparent;
+  margin-bottom: 16px;
 }
 
 /* Botón cerrar sesión */
 .logout-btn {
-  background-color: #e63946;
+  background: linear-gradient(90deg, #e63946 60%, #b71c1c 100%);
   color: white;
   border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
+  padding: 10px 22px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
+  box-shadow: 0 2px 8px rgba(219, 49, 49, 0.22);
+  transition: background 0.3s, transform 0.2s;
 }
 
 .logout-btn:hover {
-  background-color: #d62828;
+  background: linear-gradient(90deg, #b71c1c 60%, #e63946 100%);
+  transform: scale(1.04);
+}
+
+/* Lista de aportes */
+.aportes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.aportes-list li {
+  background: rgba(42, 82, 152, 0.22);
+  margin-bottom: 0;
+  padding: 16px 18px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(42, 82, 152, 0.13);
+  color: #f1f1f1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 1.05rem;
+  transition: box-shadow 0.2s;
+}
+
+.aportes-list li:hover {
+  box-shadow: 0 4px 18px rgba(42, 82, 152, 0.18);
+  background: rgba(42, 82, 152, 0.32);
+}
+
+/* Formulario de aporte */
+.aporte-form {
+  background: rgba(30, 60, 114, 0.18);
+  padding: 24px 18px;
+  border-radius: 14px;
+  margin-top: 12px;
+  box-shadow: 0 2px 12px rgba(30, 60, 114, 0.13);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.aporte-form label {
+  display: block;
+  margin-bottom: 8px;
+  color: #b3c6e7;
+  font-weight: 500;
+  font-size: 1.01rem;
+  text-align: left;
+}
+
+.aporte-form input,
+.aporte-form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 14px;
+  border-radius: 8px;
+  border: none;
+  background: #f1f1f1;
+  color: #1e3c72;
+  font-size: 1.05rem;
+  transition: outline 0.2s;
+}
+
+.aporte-form input:focus,
+.aporte-form select:focus {
+  outline: 2px solid #4cafef;
+}
+
+/* Mensajes de error o éxito */
+.mensaje {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  background: #263859;
+  color: #ffb703;
+  font-weight: bold;
+  font-size: 1.08rem;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .home-container {
+    padding: 18px 8px;
+    max-width: 98vw;
+  }
+  .aporte-form {
+    padding: 14px 6px;
+  }
 }

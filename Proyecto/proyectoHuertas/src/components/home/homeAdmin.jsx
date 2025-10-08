@@ -7,6 +7,7 @@ function AdminHome() {
   const [apellido, setApellido] = useState("");
   const [password, setPassword] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const [showForm, setShowForm] = useState(false);
 
   const miembroId = localStorage.getItem("miembro_id");
   const nombreUsuario = localStorage.getItem("nombre");
@@ -67,52 +68,67 @@ function AdminHome() {
         </div>
       </header>
 
-      <form onSubmit={handleCrearUsuario} style={{ marginTop: 20 }}>
-        <div>
-          <label htmlFor="name">Nombre</label>
-          <input
-            type="text"
-            id="name"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="apellido">Apellido</label>
-          <input
-            type="text"
-            id="apellido"
-            value={apellido}
-            onChange={(e) => setApellido(e.target.value)} // Actualizamos el estado del apellido
-            required
-          />
-        </div>
+      {!showForm && (
+        <button
+          style={{ marginTop: 24, marginBottom: 10 }}
+          onClick={() => setShowForm(true)}
+        >
+          Crear Usuario
+        </button>
+      )}
 
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="password">Contraseña</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-
-        <button type="submit">Crear Usuario</button>
-      </form>
+      {showForm && (
+        <form onSubmit={handleCrearUsuario} style={{ marginTop: 20 }}>
+          <div>
+            <label htmlFor="name">Nombre</label>
+            <input
+              type="text"
+              id="name"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="apellido">Apellido</label>
+            <input
+              type="text"
+              id="apellido"
+              value={apellido}
+              onChange={(e) => setApellido(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="password">Contraseña</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit">Crear Usuario</button>
+          <button
+            type="button"
+            style={{ marginLeft: 10 }}
+            onClick={() => setShowForm(false)}
+          >
+            Cancelar
+          </button>
+        </form>
+      )}
 
       {mensaje && <p>{mensaje}</p>}
     </div>
