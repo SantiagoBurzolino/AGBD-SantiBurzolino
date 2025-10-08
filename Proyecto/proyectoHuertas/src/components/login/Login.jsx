@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./Login.css"; // 👈 importa el CSS
-
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   // Estados para guardar lo que escribe el usuario
@@ -9,6 +9,8 @@ function Login() {
 
   // Estado para mostrar mensajes de error o éxito
   const [mensaje, setMensaje] = useState("");
+  // El navigate lo utilizo para el redireccionamiento al home dependiendo el rol
+  const navigate = useNavigate();
 
   // Función que se ejecuta cuando se envía el formulario
   const handleSubmit = async (e) => {
@@ -27,22 +29,22 @@ function Login() {
       if (res.ok) {
         setMensaje(`Bienvenido ${data.nombre}! Rol: ${data.rol_id}`);
         // Acá después podrías redirigir a otra página (ej: aportes, inventario)
+        // Guardar los datos en localStorage
+        localStorage.setItem("miembro_id", data.miembro_id);
+        localStorage.setItem("nombre", data.nombre);
+        localStorage.setItem("rol_id", data.rol_id);
+
+        if (data.rol_id === 1) {
+          navigate("/admin-home");
+        } else {
+          navigate("/user-home");
+        }
       } else {
         setMensaje(data.error || "Error al iniciar sesión");
       }
     } catch (error) {
       setMensaje("Error en el servidor");
     }
-      // Guardar los datos en localStorage
-      localStorage.setItem("miembro_id", data.miembro_id);
-      localStorage.setItem("nombre", data.nombre);
-      localStorage.setItem("rol_id", data.rol_id);
-
-     if (data.rol_id === 1) {
-        navigate("/admin-home");
-      } else {
-        navigate("/user-home");
-      }
   };
 
   return (

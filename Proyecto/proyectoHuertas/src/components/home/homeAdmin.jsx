@@ -4,6 +4,7 @@ import "./HomeAdmin.css";
 function AdminHome() {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
+  const [apellido, setApellido] = useState("");
   const [password, setPassword] = useState("");
   const [mensaje, setMensaje] = useState("");
 
@@ -31,13 +32,15 @@ function AdminHome() {
       const res = await fetch("http://localhost:5000/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nombre, email, password, rol_id: 2 }),
+        body: JSON.stringify({ nombre, apellido, email, password, rol_id: 2 }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        setMensaje(`Usuario ${nombre} creado correctamente.`);
+        setMensaje(
+          `El usuario ${nombre} ${apellido} se a creado correctamente.`
+        );
       } else {
         setMensaje(data.error || "Error al crear usuario.");
       }
@@ -75,6 +78,16 @@ function AdminHome() {
             required
           />
         </div>
+        <div>
+          <label htmlFor="apellido">Apellido</label>
+          <input
+            type="text"
+            id="apellido"
+            value={apellido}
+            onChange={(e) => setApellido(e.target.value)} // Actualizamos el estado del apellido
+            required
+          />
+        </div>
 
         <div>
           <label htmlFor="email">Email</label>
@@ -108,11 +121,6 @@ function AdminHome() {
 
 export default AdminHome;
 
-
-
-
-
-
 // import { useState } from "react";
 // import "./HomeAdmin.css"; // Importamos los estilos
 
@@ -145,9 +153,6 @@ export default AdminHome;
 //       setMensaje("Error en el servidor");
 //     }
 //   };
-  
-
-
 
 //   return (
 //     <div className="home-container">

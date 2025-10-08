@@ -6,6 +6,7 @@ function HomeUser() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasFetched, setHasFetched] = useState(false);
   const [error, setError] = useState(null);
+  const [tipoAporte, setTipoAporte] = useState(0);
 
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -40,6 +41,12 @@ function HomeUser() {
       setHasFetched(true);
     }
   };
+
+  const get_tipo_aporte = async () => {};
+
+  useEffect(() => {
+    get_tipo_aporte();
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("miembro_id");
@@ -181,27 +188,19 @@ function HomeUser() {
 
 export default HomeUser;
 
-
-
-
-
-
-
 // import React, { useState, useEffect } from "react";
 // import "./HomeUser.css";
-
 
 // function HomeUser() {
 //   const [aportes, setAportes] = useState([]);
 //   const [isLoading, setIsLoading] = useState(false);
 //   const [hasFetched, setHasFetched] = useState(false);
 //   const [error, setError] = useState(null);
-  
 
 //   // para el formulario de aporte
 //   const [showForm, setShowForm] = useState(false);
 //   const [formData, setFormData] = useState({
-//     tipo_aporte_id: "", 
+//     tipo_aporte_id: "",
 //     descripcion: "",
 //     cantidad: ""
 //   });

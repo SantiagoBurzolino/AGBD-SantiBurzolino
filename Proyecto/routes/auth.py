@@ -40,28 +40,31 @@ def login():
 # =====================
 @auth_bp.route('/register', methods=['POST'])
 def register():
-    data = request.json
-    nombre = data['nombre']
-    apellido = data['apellido']
-    email = data['email']
-    password = data['password']
-    rol_id = data.get('rol_id', 2)  # por defecto 2 = usuario normal
-    fecha_registro = data.get('fecha_registro', None)
+    try:
+        data = request.json
+        nombre = data['nombre']
+        apellido = data['apellido']
+        email = data['email']
+        password = data['password']
+        rol_id = data.get('rol_id', 2)  # por defecto 2 = usuario normal
+        fecha_registro = data.get('fecha_registro', None)
+        # Hashear la contraseña
+        hashed_password = generate_password_hash(password)
 
-    # Hashear la contraseña
-    hashed_password = generate_password_hash(password)
+        db = get_db()
+        cursor = db.cursor()
 
-    db = get_db()
-    cursor = db.cursor()
+        sql = """
+            INSERT INTO miembros (nombre, apellido, fecha_registro, rol_id, email, password)
+            VALUES (%s, %s, NOW(), %s, %s, %s)
+        """
+        cursor.execute(sql, (nombre, apellido, rol_id, email, hashed_password))
+        db.commit()
 
-    sql = """
-        INSERT INTO miembros (nombre, apellido, fecha_registro, rol_id, email, password)
-        VALUES (%s, %s, NOW(), %s, %s, %s)
-    """
-    cursor.execute(sql, (nombre, apellido, rol_id, email, hashed_password))
-    db.commit()
+        cursor.close()
+        db.close()
 
-    cursor.close()
-    db.close()
+        return jsonify({"message": "Miembro registrado correctamente"})
+    except Exception as e:
+        return jsonify({"error": e})
 
-    return jsonify({"message": "Miembro registrado correctamente"})
