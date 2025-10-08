@@ -4,6 +4,7 @@ from db import get_db
 # Creamos la blueprint de aportes
 aportes_bp = Blueprint('aportes', __name__)
 
+
 # Obtener todos los aportes (admin)
 @aportes_bp.route("/api/aportes", methods=["GET"])
 def obtener_aportes():
