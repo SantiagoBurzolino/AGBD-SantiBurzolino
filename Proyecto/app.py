@@ -4,6 +4,8 @@ from routes.auth import auth_bp
 from routes.miembros import miembros_bp
 from routes.aportes.aportes import aportes_bp
 from routes.aportes.tipoAportes import tipo_aporte_bp
+from routes.borrarUsuario.delete import delete_user_bp
+from routes.modificarUsuario.put import put
 from flask_cors import CORS
 
 
@@ -17,6 +19,8 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(miembros_bp)
 app.register_blueprint(aportes_bp)
 app.register_blueprint(tipo_aporte_bp)
+app.register_blueprint(delete_user_bp)
+app.register_blueprint(put)
 
 
 @app.route("/")

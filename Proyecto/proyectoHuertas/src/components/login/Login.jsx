@@ -75,7 +75,7 @@ function Login() {
 
       {/* Link de WhatsApp del admin */}
       <a
-        href="https://wa.me/5491161304846"
+        href="https://wa.me/5491161307820"
         target="_blank"
         rel="noopener noreferrer"
       >
