@@ -1,15 +1,17 @@
+from datetime import datetime
 import mysql.connector
+import os
+from dotenv import load_dotenv
 
+# Carga el archivo .env
+load_dotenv()
 
+def conectar():
+    return mysql.connector.connect(
+        host=os.getenv("DB_HOST"),
+        port=int(os.getenv("DB_PORT")),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_NAME")
+    )
 
-# Configuración de conexión con MySQL
-config = {
-    'user': 'huerta',
-    'password': 'huerta1234',
-    'host': '10.9.120.5',
-    'port': 3306,              
-    'database': 'huertasUrbanas' 
-}
-
-def get_db():
-    return mysql.connector.connect(**config)

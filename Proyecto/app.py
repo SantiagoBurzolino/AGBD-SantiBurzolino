@@ -7,7 +7,8 @@ from routes.aportes.tipoAportes import tipo_aporte_bp
 from routes.borrarUsuario.delete import delete_user_bp
 from routes.modificarUsuario.put import put
 from flask_cors import CORS
-
+import os
+from dotenv import load_dotenv
 
 
 app = Flask(__name__)

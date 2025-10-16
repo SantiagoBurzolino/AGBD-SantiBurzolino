@@ -8,6 +8,9 @@ function AdminHome() {
   const [password, setPassword] = useState("");
   const [mensaje, setMensaje] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [usuarios, setUsuarios] = useState([]);
+  const [editUser, setEditUser] = useState(null); // Para editar datos en el form
+  const [showUsuarios, setShowUsuarios] = useState(false); // toggle ver/ocultar
 
   const miembroId = localStorage.getItem("miembro_id");
   const nombreUsuario = localStorage.getItem("nombre");
@@ -26,22 +29,63 @@ function AdminHome() {
     window.location.href = "/";
   };
 
+  // Cargar usuarios solo cuando se pulsa "Ver Usuarios" o al refrescar después de editar/eliminar/crear
+  const cargarUsuarios = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/users");
+      if (!res.ok) throw new Error("Error al traer usuarios");
+      const data = await res.json();
+      setUsuarios(data);
+    } catch {
+      setUsuarios([]);
+    }
+  };
+
+  // Handler para eliminar
+  const handleEliminar = async (id) => {
+    if (window.confirm("¿Seguro que quieres borrar este usuario?")) {
+      const res = await fetch(`http://localhost:5000/users/${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setUsuarios((u) => u.filter((usr) => usr.miembro_id !== id));
+      }
+    }
+  };
+
+  // Handler para modificar
+  const handleActualizar = async (user) => {
+    const res = await fetch(`http://localhost:5000/users/${user.miembro_id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nombre: user.nombre,
+        apellido: user.apellido,
+        email: user.email,
+        rol_id: user.rol_id,
+      }),
+    });
+    if (res.ok) {
+      alert("Usuario actualizado");
+      setEditUser(null);
+      // refrescar tabla si está visible
+      if (showUsuarios) cargarUsuarios();
+    }
+  };
+
   const handleCrearUsuario = async (e) => {
     e.preventDefault();
-
     try {
       const res = await fetch("http://localhost:5000/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre, apellido, email, password, rol_id: 2 }),
       });
-
       const data = await res.json();
-
       if (res.ok) {
-        setMensaje(
-          `El usuario ${nombre} ${apellido} se a creado correctamente.`
-        );
+        setMensaje(`El usuario ${nombre} ${apellido} se a creado correctamente.`);
+        // refrescar tabla si está visible
+        if (showUsuarios) cargarUsuarios();
       } else {
         setMensaje(data.error || "Error al crear usuario.");
       }
@@ -52,29 +96,34 @@ function AdminHome() {
 
   return (
     <div className="home-container">
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
+      <header className="admin-header">
         <h1>Panel Admin</h1>
-        <div>
-          <span style={{ marginRight: "10px" }}>Hola, {nombreUsuario}</span>
+        <div className="admin-user-info">
+          <span className="admin-greeting">Hola, {nombreUsuario}</span>
           <button className="logout-btn" onClick={handleLogout}>
-            Cerrar sesión
+          Cerrar sesión
           </button>
         </div>
       </header>
-
+      
       {!showForm && (
-        <button
-          style={{ marginTop: 24, marginBottom: 10 }}
-          onClick={() => setShowForm(true)}
-        >
-          Crear Usuario
-        </button>
+        <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+          <button
+            style={{ marginTop: 24, marginBottom: 10 }}
+            onClick={() => setShowForm(true)}
+          >
+            Crear Usuario
+          </button>
+          <button
+            style={{ marginTop: 24, marginBottom: 10 }}
+            onClick={async () => {
+              if (!showUsuarios) await cargarUsuarios();
+              setShowUsuarios((s) => !s);
+            }}
+          >
+            {showUsuarios ? "Ocultar Usuarios" : "Ver Usuarios"}
+          </button>
+        </div>
       )}
 
       {showForm && (
@@ -119,105 +168,102 @@ function AdminHome() {
               required
             />
           </div>
-          <button type="submit">Crear Usuario</button>
-          <button
-            type="button"
-            style={{ marginLeft: 10 }}
-            onClick={() => setShowForm(false)}
-          >
-            Cancelar
-          </button>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <button type="submit">Crear Usuario</button>
+            <button
+              type="button"
+              style={{ marginLeft: 10 }}
+              onClick={() => setShowForm(false)}
+              className="cancel-btn"
+            >
+              Cancelar
+            </button>
+          </div>
         </form>
       )}
 
       {mensaje && <p>{mensaje}</p>}
+
+      {showUsuarios && (
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th><th>Apellido</th><th>Email</th><th>Editar</th><th>Borrar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {usuarios.map((u) => (
+              <tr key={u.miembro_id}>
+                <td>{u.nombre}</td>
+                <td>{u.apellido}</td>
+                <td>{u.email}</td>
+                <td>
+                  <button onClick={() => setEditUser(u)}>Editar</button>
+                </td>
+                <td>
+                  <button onClick={() => handleEliminar(u.miembro_id)}>Borrar</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      {/* Form editar (si editUser no es null, mostrar el form con sus datos para editar) */}
+      {editUser && (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleActualizar(editUser);
+          }}
+        >
+          {/* Inputs de nombre, apellido, etc, usando editUser para los valores */}
+          <div>
+            <label>Nombre</label>
+            <input
+              type="text"
+              value={editUser.nombre}
+              onChange={(e) => setEditUser({ ...editUser, nombre: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <label>Apellido</label>
+            <input
+              type="text"
+              value={editUser.apellido}
+              onChange={(e) => setEditUser({ ...editUser, apellido: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <label>Email</label>
+            <input
+              type="email"
+              value={editUser.email}
+              onChange={(e) => setEditUser({ ...editUser, email: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <label>Rol ID</label>
+            <input
+              type="number"
+              value={editUser.rol_id}
+              onChange={(e) =>
+                setEditUser({ ...editUser, rol_id: parseInt(e.target.value) })
+              }
+              required
+            />
+          </div>
+          <button type="submit">Guardar cambios</button>
+          <button type="button" onClick={() => setEditUser(null)}>
+            Cancelar
+          </button>
+        </form>
+      )}
     </div>
   );
 }
 
 export default AdminHome;
-
-// import { useState } from "react";
-// import "./HomeAdmin.css"; // Importamos los estilos
-
-// function AdminHome() {
-//   const [nombre, setNombre] = useState("");
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [mensaje, setMensaje] = useState("");
-//   const miembroId = localStorage.getItem("miembro_id");
-//   const nombreUsuario = localStorage.getItem("nombre");
-
-//   const handleCrearUsuario = async (e) => {
-//     e.preventDefault();
-
-//     try {
-//       const res = await fetch("http://localhost:5000/register", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ nombre, email, password, rol_id: 2 }), // rol_id 2 = usuario
-//       });
-
-//       const data = await res.json();
-
-//       if (res.ok) {
-//         setMensaje(`Usuario ${nombre} creado correctamente.`);
-//       } else {
-//         setMensaje(data.error || "Error al crear usuario.");
-//       }
-//     } catch (error) {
-//       setMensaje("Error en el servidor");
-//     }
-//   };
-
-//   return (
-//     <div className="home-container">
-//       <h1>Panel Admin</h1>
-//       <form onSubmit={handleCrearUsuario}>
-//         <div>
-//             <div>
-//                 <label htmlFor="name" className={""}>Nombre</label>
-//                 <input
-//                 type="text"
-//                 id="name"
-//                 value={nombre}
-//                 onChange={(e) => setNombre(e.target.value)}
-//                 required
-//                 />
-//             </div>
-//         </div>
-//         <div>
-//             <div>
-//                 <label htmlFor="email">Email</label>
-//                 <input
-//                 type="email"
-//                 id="email"
-//                 value={email}
-//                 onChange={(e) => setEmail(e.target.value)}
-//                 required
-//                 />
-//             </div>
-//         </div>
-
-//         <div>
-//             <div>
-//                 <label htmlFor="password">Contraseña</label>
-//                 <input
-//                 type="password"
-//                 id="password"
-//                 value={password}
-//                 onChange={(e) => setPassword(e.target.value)}
-//                 required
-//                 />
-//             </div>
-//         </div>
-
-//         <button type="submit">Crear Usuario</button>
-//       </form>
-
-//       {mensaje && <p>{mensaje}</p>}
-//     </div>
-//   );
-// }
-
-// export default AdminHome;

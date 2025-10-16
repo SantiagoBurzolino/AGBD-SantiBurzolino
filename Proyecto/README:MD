@@ -13,3 +13,17 @@ Recomendacion Mia para funcionalidades
 Advertir si hay pocas cosas en el inventario para que algun 
 usuario traiga ese tipo de material
 la cual se necesita, una puede ser regar o traer material. Ej Tierra.
+
+
+
+para instalar el flask y las librerias.
+
+pip install flask flask-cors mysql-connector-python werkzeug
+pip install python-dotenv
+
+para instalar el npm y sus librerias
+
+npm install vite@latest
+npm install mysql2
+npm install dotenv
+npm install react-router-dom

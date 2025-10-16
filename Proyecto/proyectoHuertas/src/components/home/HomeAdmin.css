@@ -27,6 +27,24 @@ body {
   font-size: 24px;
 }
 
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-user-info {
+  display: flex;
+  align-items: center;      /* centra verticalmente el saludo respecto al botón */
+  gap: 10px;                /* separación entre saludo y botón */
+}
+
+.admin-greeting {
+  line-height: 1;           /* evita desalineado por altura de línea */
+  display: flex;
+  align-items: center;      /* centra el texto dentro de su caja */
+}
+
 /* Formulario */
 form {
   display: flex;
@@ -86,7 +104,6 @@ form button:hover {
   font-size: 14px;
   font-weight: bold;
 }
-
 
 .logout-btn {
   background-color: #e63946;
