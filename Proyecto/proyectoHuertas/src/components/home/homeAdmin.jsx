@@ -11,6 +11,7 @@ function AdminHome() {
   const [usuarios, setUsuarios] = useState([]);
   const [editUser, setEditUser] = useState(null); // Para editar datos en el form
   const [showUsuarios, setShowUsuarios] = useState(false); // toggle ver/ocultar
+  const [showCrearUsuario, setShowCrearUsuario] = useState(false);
 
   const miembroId = localStorage.getItem("miembro_id");
   const nombreUsuario = localStorage.getItem("nombre");
@@ -84,8 +85,22 @@ function AdminHome() {
       const data = await res.json();
       if (res.ok) {
         setMensaje(
-          `El usuario ${nombre} ${apellido} se a creado correctamente.`
+          `El usuario ${nombre} ${apellido} se a creado correctamente.`,
+          setTimeout(() => {
+            // 🔙 Volver al inicio del panel admin
+            setShowCrearUsuario(false); // si usás un estado para mostrar el formulario
+            setShowUsuarios(false); // si querés cerrar también la vista de usuarios
+            setMensaje(""); // limpiar mensajes previos
+            setShowForm(false);
+          }, 2000)
         );
+
+        // 🧹 Limpiar los campos del formulario
+        setNombre("");
+        setApellido("");
+        setEmail("");
+        setPassword("");
+
         if (showUsuarios) cargarUsuarios();
       } else {
         setMensaje(data.error || "Error al crear usuario.");
