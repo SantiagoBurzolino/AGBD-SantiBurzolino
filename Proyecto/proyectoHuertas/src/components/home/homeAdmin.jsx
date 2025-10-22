@@ -83,12 +83,14 @@ function AdminHome() {
       });
       const data = await res.json();
       if (res.ok) {
-        setMensaje(`El usuario ${nombre} ${apellido} se a creado correctamente.`);
-        // refrescar tabla si está visible
+        setMensaje(
+          `El usuario ${nombre} ${apellido} se a creado correctamente.`
+        );
         if (showUsuarios) cargarUsuarios();
       } else {
         setMensaje(data.error || "Error al crear usuario.");
       }
+      // refrescar tabla si está visible
     } catch (error) {
       setMensaje("Error en el servidor");
     }
@@ -101,11 +103,11 @@ function AdminHome() {
         <div className="admin-user-info">
           <span className="admin-greeting">Hola, {nombreUsuario}</span>
           <button className="logout-btn" onClick={handleLogout}>
-          Cerrar sesión
+            Cerrar sesión
           </button>
         </div>
       </header>
-      
+
       {!showForm && (
         <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
           <button
@@ -188,7 +190,11 @@ function AdminHome() {
         <table>
           <thead>
             <tr>
-              <th>Nombre</th><th>Apellido</th><th>Email</th><th>Editar</th><th>Borrar</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Email</th>
+              <th>Editar</th>
+              <th>Borrar</th>
             </tr>
           </thead>
           <tbody>
@@ -201,7 +207,9 @@ function AdminHome() {
                   <button onClick={() => setEditUser(u)}>Editar</button>
                 </td>
                 <td>
-                  <button onClick={() => handleEliminar(u.miembro_id)}>Borrar</button>
+                  <button onClick={() => handleEliminar(u.miembro_id)}>
+                    Borrar
+                  </button>
                 </td>
               </tr>
             ))}
@@ -223,7 +231,9 @@ function AdminHome() {
             <input
               type="text"
               value={editUser.nombre}
-              onChange={(e) => setEditUser({ ...editUser, nombre: e.target.value })}
+              onChange={(e) =>
+                setEditUser({ ...editUser, nombre: e.target.value })
+              }
               required
             />
           </div>
@@ -232,7 +242,9 @@ function AdminHome() {
             <input
               type="text"
               value={editUser.apellido}
-              onChange={(e) => setEditUser({ ...editUser, apellido: e.target.value })}
+              onChange={(e) =>
+                setEditUser({ ...editUser, apellido: e.target.value })
+              }
               required
             />
           </div>
@@ -241,7 +253,9 @@ function AdminHome() {
             <input
               type="email"
               value={editUser.email}
-              onChange={(e) => setEditUser({ ...editUser, email: e.target.value })}
+              onChange={(e) =>
+                setEditUser({ ...editUser, email: e.target.value })
+              }
               required
             />
           </div>

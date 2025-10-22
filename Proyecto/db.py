@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 # Carga el archivo .env
 load_dotenv()
 
-def conectar():
+def get_db():
     return mysql.connector.connect(
         host=os.getenv("DB_HOST"),
         port=int(os.getenv("DB_PORT")),

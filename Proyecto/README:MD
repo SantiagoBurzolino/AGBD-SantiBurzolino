@@ -5,12 +5,12 @@ notificaciones.
 charlar entre usuarios.
 gestion de Tareas, turnos.
 huertas creadas por el usuarios.
-los miembros que hay en la huerta. 
+los miembros que hay en la huerta.
 Dependiendo si es la del usuario o la nuestra.
 
 Recomendacion Mia para funcionalidades
 
-Advertir si hay pocas cosas en el inventario para que algun 
+Advertir si hay pocas cosas en el inventario para que algun
 usuario traiga ese tipo de material
 la cual se necesita, una puede ser regar o traer material. Ej Tierra.
 
@@ -18,6 +18,8 @@ la cual se necesita, una puede ser regar o traer material. Ej Tierra.
 
 para instalar el flask y las librerias.
 
+python -m venv .venv
+source .venv/bin/activate
 pip install flask flask-cors mysql-connector-python werkzeug
 pip install python-dotenv
 
@@ -27,3 +29,10 @@ npm install vite@latest
 npm install mysql2
 npm install dotenv
 npm install react-router-dom
+
+
+DB_HOST=10.9.120.5
+DB_PORT=3306
+DB_USER=huerta
+DB_PASSWORD=huerta1234
+DB_NAME=huertasUrbanas

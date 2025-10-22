@@ -35,14 +35,15 @@ body {
 
 .admin-user-info {
   display: flex;
-  align-items: center;      /* centra verticalmente el saludo respecto al botón */
-  gap: 10px;                /* separación entre saludo y botón */
+  align-items: center; /* centra verticalmente el saludo respecto al botón */
+  gap: 10px; /* separación entre saludo y botón */
+  flex-direction: column;
 }
 
 .admin-greeting {
-  line-height: 1;           /* evita desalineado por altura de línea */
+  line-height: 1; /* evita desalineado por altura de línea */
   display: flex;
-  align-items: center;      /* centra el texto dentro de su caja */
+  align-items: center; /* centra el texto dentro de su caja */
 }
 
 /* Formulario */
