@@ -28,6 +28,9 @@ app.register_blueprint(put)
 def index():
     return "<h1>App Huerta funcionando</h1>"
 
+def create_app():
+    return app
+
 if __name__ == "__main__":
     app.run(debug=True)
 

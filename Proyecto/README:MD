@@ -15,7 +15,11 @@ Advertir si hay pocas cosas en el inventario para que algun
 usuario traiga ese tipo de material
 la cual se necesita, una puede ser regar o traer material. Ej Tierra.
 
+para poder hacer pruebas en backend front sin complicarme a correr
+todo simplemente corriendo una parte del codigo
 
+pip install Flask pytest pytest-cov
+pip install requests faker
 
 para instalar el flask y las librerias.
 
