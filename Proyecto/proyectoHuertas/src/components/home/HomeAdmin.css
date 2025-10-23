@@ -120,29 +120,55 @@ form button:hover {
   background-color: #d62828;
 }
 
+/* Contenedor de paginación: SIEMPRE en una fila */
 .pagination {
   display: flex;
-  justify-content: center;
+  flex-direction: row; /* explícito: horizontal */
+  flex-wrap: nowrap; /* no bajar a otra línea */
+  justify-content: center; /* centrado horizontal */
   align-items: center;
-  gap: 8px;
-  margin-top: 15px;
+  column-gap: 6px; /* espacio horizontal entre botones */
+  row-gap: 0; /* sin salto vertical */
+  margin-top: 12px;
+
+  /* Si no entra, habilita scroll horizontal pero se mantiene una sola fila */
+  overflow-x: auto; /* permite arrastrar con trackpad/scroll */
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch; /* suave en mobile */
+  scrollbar-width: thin; /* Firefox */
 }
 
+/* Botones compactos */
 .pagination button {
-  padding: 6px 12px;
-  border-radius: 6px;
+  display: inline-flex;       /* flex para centrar contenido */
+  align-items: center;        /* centra vertical */
+  justify-content: center;    /* centra horizontal */
+
+  height: 28px;               /* tu altura fija */
+  min-width: 28px;
+  padding: 0 8px;             /* sin padding vertical, solo horizontal */
+  line-height: 1;             /* evita desajuste vertical */
+  font-size: 12px;
+
   border: none;
-  cursor: pointer;
+  border-radius: 6px;
   background-color: #3498db;
-  color: white;
-  font-weight: bold;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
   transition: background 0.2s;
+  white-space: nowrap;
+}
+
 }
 
 .pagination button:hover {
   background-color: #2980b9;
 }
-
 .pagination button.active {
   background-color: #27ae60;
+}
+.pagination button:disabled {
+  opacity: 0.6;
+  cursor: default;
 }

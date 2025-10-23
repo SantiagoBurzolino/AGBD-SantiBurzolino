@@ -16,6 +16,12 @@ function AdminHome() {
   const [totalUsuarios, setTotalUsuarios] = useState(0);
   const usuariosPorPagina = 3;
 
+  // Cálculo robusto de total de páginas (evita NaN/undefined)
+  const totalPaginas = Math.max(
+    1,
+    Math.ceil((totalUsuarios || 0) / usuariosPorPagina)
+  );
+
   const miembroId = localStorage.getItem("miembro_id");
   const nombreUsuario = localStorage.getItem("nombre");
 
@@ -33,7 +39,6 @@ function AdminHome() {
     window.location.href = "/";
   };
 
-  // Cargar usuarios solo cuando se pulsa "Ver Usuarios" o al refrescar después de editar/eliminar/crear
   // 🔹 Función para cargar usuarios con paginado
   const cargarUsuarios = async (page = 1) => {
     try {
@@ -42,11 +47,13 @@ function AdminHome() {
       );
       if (!res.ok) throw new Error("Error al traer usuarios");
       const data = await res.json();
-      setUsuarios(data.usuarios);
-      setTotalUsuarios(data.total);
+      setUsuarios(data.usuarios || []);
+      setTotalUsuarios(data.total ?? 0);
       setPaginaActual(page);
     } catch {
       setUsuarios([]);
+      setTotalUsuarios(0);
+      setPaginaActual(1);
     }
   };
 
@@ -58,6 +65,8 @@ function AdminHome() {
       });
       if (res.ok) {
         setUsuarios((u) => u.filter((usr) => usr.miembro_id !== id));
+        // Opcional: recargar para mantener el conteo consistente
+        if (showUsuarios) cargarUsuarios(paginaActual);
       }
     }
   };
@@ -77,8 +86,7 @@ function AdminHome() {
     if (res.ok) {
       alert("Usuario actualizado");
       setEditUser(null);
-      // refrescar tabla si está visible
-      if (showUsuarios) cargarUsuarios();
+      if (showUsuarios) cargarUsuarios(paginaActual);
     }
   };
 
@@ -95,29 +103,50 @@ function AdminHome() {
         setMensaje(
           `El usuario ${nombre} ${apellido} se a creado correctamente.`,
           setTimeout(() => {
-            // 🔙 Volver al inicio del panel admin
-            setShowCrearUsuario(false); // si usás un estado para mostrar el formulario
-            setShowUsuarios(false); // si querés cerrar también la vista de usuarios
-            setMensaje(""); // limpiar mensajes previos
+            setShowCrearUsuario(false);
+            setShowUsuarios(false);
+            setMensaje("");
             setShowForm(false);
           }, 2000)
         );
-
-        // 🧹 Limpiar los campos del formulario
         setNombre("");
         setApellido("");
         setEmail("");
         setPassword("");
-
-        if (showUsuarios) cargarUsuarios();
+        if (showUsuarios) cargarUsuarios(1);
       } else {
         setMensaje(data.error || "Error al crear usuario.");
       }
-      // refrescar tabla si está visible
     } catch (error) {
       setMensaje("Error en el servidor");
     }
   };
+
+  // ————————————————————————————————————————
+  // PAGINADO PROGRESIVO: función para decidir qué números mostrar
+  function getPaginasAMostrar(pagActual, totPag, ventana = 4) {
+    const paginas = [];
+    if (!Number.isFinite(pagActual)) pagActual = 1;
+    if (!Number.isFinite(totPag) || totPag < 1) totPag = 1;
+
+    const mitad = Math.floor(ventana / 2);
+
+    let start = Math.max(1, pagActual - mitad);
+    let end = Math.min(totPag, start + ventana - 1);
+
+    // Ajuste si estamos cerca del final o del inicio
+    if (end - start + 1 < ventana) {
+      if (start === 1) {
+        end = Math.min(totPag, start + ventana - 1);
+      } else if (end === totPag) {
+        start = Math.max(1, end - ventana + 1);
+      }
+    }
+
+    for (let i = start; i <= end; i++) paginas.push(i);
+    return paginas;
+  }
+  // ————————————————————————————————————————
 
   return (
     <div className="home-container">
@@ -142,7 +171,7 @@ function AdminHome() {
           <button
             style={{ marginTop: 24, marginBottom: 10 }}
             onClick={async () => {
-              if (!showUsuarios) await cargarUsuarios();
+              if (!showUsuarios) await cargarUsuarios(1);
               setShowUsuarios((s) => !s);
             }}
           >
@@ -240,30 +269,45 @@ function AdminHome() {
             </tbody>
           </table>
 
-          {/* 🔹 Paginación */}
+          {/* 🔹 Paginación progresiva */}
           <div className="pagination" style={{ marginTop: "10px" }}>
-            {Array.from(
-              { length: Math.ceil(totalUsuarios / usuariosPorPagina) },
-              (_, i) => (
-                <button
-                  key={i}
-                  onClick={() => cargarUsuarios(i + 1)}
-                  className={paginaActual === i + 1 ? "active" : ""}
-                  style={{
-                    margin: "2px",
-                    padding: "6px 10px",
-                    backgroundColor:
-                      paginaActual === i + 1 ? "#4CAF50" : "#eee",
-                    color: paginaActual === i + 1 ? "#fff" : "#000",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                  }}
-                >
-                  {i + 1}
-                </button>
-              )
-            )}
+            <button
+              onClick={() => cargarUsuarios(1)}
+              disabled={paginaActual <= 1}
+            >
+              {"<<"}
+            </button>
+            <button
+              onClick={() => cargarUsuarios(Math.max(1, paginaActual - 1))}
+              disabled={paginaActual <= 1}
+            >
+              {"<"}
+            </button>
+
+            {getPaginasAMostrar(paginaActual, totalPaginas, 4).map((num) => (
+              <button
+                key={num}
+                onClick={() => cargarUsuarios(num)}
+                className={paginaActual === num ? "active" : ""}
+              >
+                {num}
+              </button>
+            ))}
+
+            <button
+              onClick={() =>
+                cargarUsuarios(Math.min(totalPaginas, paginaActual + 1))
+              }
+              disabled={paginaActual >= totalPaginas}
+            >
+              {">"}
+            </button>
+            <button
+              onClick={() => cargarUsuarios(totalPaginas)}
+              disabled={paginaActual >= totalPaginas}
+            >
+              {">>"}
+            </button>
           </div>
         </>
       )}
@@ -276,7 +320,6 @@ function AdminHome() {
             handleActualizar(editUser);
           }}
         >
-          {/* Inputs de nombre, apellido, etc, usando editUser para los valores */}
           <div>
             <label>Nombre</label>
             <input
