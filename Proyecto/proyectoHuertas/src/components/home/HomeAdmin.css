@@ -140,14 +140,14 @@ form button:hover {
 
 /* Botones compactos */
 .pagination button {
-  display: inline-flex;       /* flex para centrar contenido */
-  align-items: center;        /* centra vertical */
-  justify-content: center;    /* centra horizontal */
+  display: inline-flex; /* flex para centrar contenido */
+  align-items: center; /* centra vertical */
+  justify-content: center; /* centra horizontal */
 
-  height: 28px;               /* tu altura fija */
+  height: 28px; /* tu altura fija */
   min-width: 28px;
-  padding: 0 8px;             /* sin padding vertical, solo horizontal */
-  line-height: 1;             /* evita desajuste vertical */
+  padding: 0 8px; /* sin padding vertical, solo horizontal */
+  line-height: 1; /* evita desajuste vertical */
   font-size: 12px;
 
   border: none;
@@ -158,8 +158,6 @@ form button:hover {
   cursor: pointer;
   transition: background 0.2s;
   white-space: nowrap;
-}
-
 }
 
 .pagination button:hover {
