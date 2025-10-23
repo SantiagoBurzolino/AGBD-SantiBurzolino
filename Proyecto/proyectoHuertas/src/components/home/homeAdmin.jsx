@@ -12,6 +12,9 @@ function AdminHome() {
   const [editUser, setEditUser] = useState(null); // Para editar datos en el form
   const [showUsuarios, setShowUsuarios] = useState(false); // toggle ver/ocultar
   const [showCrearUsuario, setShowCrearUsuario] = useState(false);
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [totalUsuarios, setTotalUsuarios] = useState(0);
+  const usuariosPorPagina = 3;
 
   const miembroId = localStorage.getItem("miembro_id");
   const nombreUsuario = localStorage.getItem("nombre");
@@ -31,12 +34,17 @@ function AdminHome() {
   };
 
   // Cargar usuarios solo cuando se pulsa "Ver Usuarios" o al refrescar después de editar/eliminar/crear
-  const cargarUsuarios = async () => {
+  // 🔹 Función para cargar usuarios con paginado
+  const cargarUsuarios = async (page = 1) => {
     try {
-      const res = await fetch("http://localhost:5000/users");
+      const res = await fetch(
+        `http://localhost:5000/users?page=${page}&limit=${usuariosPorPagina}`
+      );
       if (!res.ok) throw new Error("Error al traer usuarios");
       const data = await res.json();
-      setUsuarios(data);
+      setUsuarios(data.usuarios);
+      setTotalUsuarios(data.total);
+      setPaginaActual(page);
     } catch {
       setUsuarios([]);
     }
@@ -202,34 +210,62 @@ function AdminHome() {
       {mensaje && <p>{mensaje}</p>}
 
       {showUsuarios && (
-        <table>
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Apellido</th>
-              <th>Email</th>
-              <th>Editar</th>
-              <th>Borrar</th>
-            </tr>
-          </thead>
-          <tbody>
-            {usuarios.map((u) => (
-              <tr key={u.miembro_id}>
-                <td>{u.nombre}</td>
-                <td>{u.apellido}</td>
-                <td>{u.email}</td>
-                <td>
-                  <button onClick={() => setEditUser(u)}>Editar</button>
-                </td>
-                <td>
-                  <button onClick={() => handleEliminar(u.miembro_id)}>
-                    Borrar
-                  </button>
-                </td>
+        <>
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Editar</th>
+                <th>Borrar</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {usuarios.map((u) => (
+                <tr key={u.miembro_id}>
+                  <td>{u.nombre}</td>
+                  <td>{u.apellido}</td>
+                  <td>{u.email}</td>
+                  <td>
+                    <button onClick={() => setEditUser(u)}>Editar</button>
+                  </td>
+                  <td>
+                    <button onClick={() => handleEliminar(u.miembro_id)}>
+                      Borrar
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {/* 🔹 Paginación */}
+          <div className="pagination" style={{ marginTop: "10px" }}>
+            {Array.from(
+              { length: Math.ceil(totalUsuarios / usuariosPorPagina) },
+              (_, i) => (
+                <button
+                  key={i}
+                  onClick={() => cargarUsuarios(i + 1)}
+                  className={paginaActual === i + 1 ? "active" : ""}
+                  style={{
+                    margin: "2px",
+                    padding: "6px 10px",
+                    backgroundColor:
+                      paginaActual === i + 1 ? "#4CAF50" : "#eee",
+                    color: paginaActual === i + 1 ? "#fff" : "#000",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  {i + 1}
+                </button>
+              )
+            )}
+          </div>
+        </>
       )}
 
       {/* Form editar (si editUser no es null, mostrar el form con sus datos para editar) */}

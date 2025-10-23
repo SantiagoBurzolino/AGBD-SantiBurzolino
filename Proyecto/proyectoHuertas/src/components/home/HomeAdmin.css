@@ -119,3 +119,30 @@ form button:hover {
 .logout-btn:hover {
   background-color: #d62828;
 }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: #3498db;
+  color: white;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.pagination button:hover {
+  background-color: #2980b9;
+}
+
+.pagination button.active {
+  background-color: #27ae60;
+}

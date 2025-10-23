@@ -9,11 +9,29 @@ miembros_bp = Blueprint('miembros', __name__)
 def obtener_usuarios():
     db = get_db()
     cursor = db.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM miembros")
+
+    # Parámetros de paginado
+    page = int(request.args.get('page', 1))
+    limit = int(request.args.get('limit', 6))
+    offset = (page - 1) * limit
+
+    # Total de usuarios
+    cursor.execute("SELECT COUNT(*) as total FROM miembros")
+    total = cursor.fetchone()['total']
+
+    # Usuarios de la página actual
+    cursor.execute("SELECT * FROM miembros LIMIT %s OFFSET %s", (limit, offset))
     usuarios = cursor.fetchall()
+
     cursor.close()
     db.close()
-    return jsonify(usuarios)
+
+    return jsonify({
+        "usuarios": usuarios,
+        "total": total,
+        "page": page,
+        "limit": limit
+    })
 
 # 📌 POST - Crear nuevo usuario
 @miembros_bp.route('/users', methods=['POST'])
@@ -67,27 +85,3 @@ def eliminar_usuario(id):
 
 
 
-
-
-# @miembros_bp.route('/miembros', methods=['POST'])
-# def crear_miembro():
-#     # Aquí debería validar que quien hace la petición es admin
-#     data = request.json
-#     nombre = data['nombre']
-#     email = data['email']
-#     password = data['password']
-#     rol_id = data['rol_id']
-
-#     password_hash = generate_password_hash(password)
-
-#     db = get_db()
-#     cursor = db.cursor()
-#     cursor.execute("""
-#         INSERT INTO miembros (nombre, email, password, rol_id, fecha_registro)
-#         VALUES (%s, %s, %s, %s, CURDATE())
-#     """, (nombre, email, password_hash, rol_id))
-#     db.commit()
-#     cursor.close()
-#     db.close()
-
-#     return jsonify({"mensaje": "Miembro creado correctamente"})

@@ -15,8 +15,8 @@ Advertir si hay pocas cosas en el inventario para que algun
 usuario traiga ese tipo de material
 la cual se necesita, una puede ser regar o traer material. Ej Tierra.
 
-para poder hacer pruebas en backend front sin complicarme a correr
-todo simplemente corriendo una parte del codigo
+Para poder hacer pruebas en backend front sin complicarme a correr
+todo simplemente corriendo una parte del codigo.
 
 pip install Flask pytest pytest-cov
 pip install requests faker
@@ -35,6 +35,8 @@ npm install mysql2
 npm install dotenv
 npm install react-router-dom
 
+
+Para el .env
 
 DB_HOST=10.9.120.5
 DB_PORT=3306
