@@ -1,5 +1,4 @@
 import pytest
-
 # Test para obtener todos los usuarios
 def test_obtener_usuarios(client):
     response = client.get("/users")  # Petición GET a /users
@@ -23,6 +22,7 @@ def test_crear_usuario(client):
         "rol_id": 2
     }
     response = client.post("/users", json=user_data)  # Crear un usuario
-    assert response.status_code == 200  # Código 201 indica que el recurso fue creado correctamente
+    assert response.status_code == 200  # Código 200 indica que el recurso fue creado correctamente
     data = response.get_json()
     assert data["mensaje"] == "Usuario creado correctamente"  # Mensaje de éxito
+

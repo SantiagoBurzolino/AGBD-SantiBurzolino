@@ -22,11 +22,15 @@ CREATE TABLE aportes (
     aporte_id INT AUTO_INCREMENT PRIMARY KEY,
     miembro_id INT NOT NULL,
     planta_id INT NOT NULL,
-    tipo_aporte VARCHAR(50) NOT NULL,
-    fecha DATE NOT NULL,
+    tipo_aporte_id INT NOT NULL,
+    descripcion VARCHAR(255),
+    cantidad INT,
+    fecha DATE NOT NULL DEFAULT (CURDATE()),
     FOREIGN KEY (miembro_id) REFERENCES miembros(miembro_id),
-    FOREIGN KEY (planta_id) REFERENCES plantas(planta_id)
+    FOREIGN KEY (planta_id) REFERENCES plantas(planta_id),
+    FOREIGN KEY (tipo_aporte_id) REFERENCES tipos_aporte(tipo_id)
 );
+
 
 CREATE TABLE miembros (
     miembro_id INT AUTO_INCREMENT PRIMARY KEY,

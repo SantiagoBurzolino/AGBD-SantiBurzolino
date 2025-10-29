@@ -38,6 +38,7 @@ def obtener_usuarios():
 def crear_usuario():
     data = request.json
     nombre = data['nombre']
+    apellido = data['apellido']
     email = data['email']
     password = data['password']
     rol_id = data['rol_id']
@@ -46,9 +47,9 @@ def crear_usuario():
     db = get_db()
     cursor = db.cursor()
     cursor.execute("""
-        INSERT INTO miembros (nombre, email, password, rol_id, fecha_registro)
-        VALUES (%s, %s, %s, %s, CURDATE())
-    """, (nombre, email, password_hash, rol_id))
+        INSERT INTO miembros (nombre, email, apellido, password, rol_id, fecha_registro)
+        VALUES (%s, %s, %s, %s, %s, CURDATE())
+    """, (nombre, email, apellido, password_hash, rol_id))
     db.commit()
     cursor.close()
     db.close()
