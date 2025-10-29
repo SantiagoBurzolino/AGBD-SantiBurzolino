@@ -8,6 +8,7 @@ put = Blueprint('put', __name__)
 @put.route('/users/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
     data = request.json
+
     db = get_db()
     cursor = db.cursor()
     try:
@@ -26,7 +27,7 @@ def update_user(user_id):
             user_id
         ))
         db.commit()
-        return jsonify({"message": "Usuario actualizado"})
+        return jsonify({"message": "Usuario actualizado"}) 
     except Exception as e:
         return jsonify({"error": str(e)}), 400
     finally:
