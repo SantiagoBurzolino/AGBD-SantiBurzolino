@@ -20,14 +20,7 @@ def test_login_success(client):
 
 
     # Simulamos redirección según rol
-    if data["rol_id"] == 1:
-        destino = "/homeAdmin"
-    else:
-        destino = "/homeUser"
-
-    # Verificamos que el destino sea coherente
-    print(f"Usuario {data['nombre']} redirigido a: {destino}")
-    assert destino in ["/homeAdmin", "/homeUser"]
+    assert data["rol_id"] == 2
 
 
 # ============================
@@ -42,3 +35,4 @@ def test_login_failure(client):
     assert response.status_code == 401  # Credenciales incorrectas
     data = response.get_json()
     assert "error" in data
+

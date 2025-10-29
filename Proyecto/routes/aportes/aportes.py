@@ -50,18 +50,20 @@ def obtener_aportes_por_miembro(miembro_id):
 def agregar_aporte():
     datos = request.json
     miembro_id = datos["miembro_id"]
-    tipo_aporte_id = datos["tipo_aporte_id"]  # ej: semillas, herramientas, dinero
+    planta_id = datos["planta_id"]
+    tipo_id = datos.get("tipo_id", 1)  # opcional, default 1 si no se manda
+    tipo_aporte_id = datos["tipo_aporte_id"]
     descripcion = datos["descripcion"]
     cantidad = datos["cantidad"]
 
     db = get_db()
     cursor = db.cursor()
     cursor.execute("""
-        INSERT INTO aportes (miembro_id, tipo_aporte_id, descripcion, cantidad, fecha_aporte)
-        VALUES (%s, %s, %s, %s, CURDATE())
-    """, (miembro_id, tipo_aporte_id, descripcion, cantidad))
+        INSERT INTO aportes (miembro_id, planta_id, tipo_id, tipo_aporte_id, descripcion, cantidad, fecha_aporte)
+        VALUES (%s, %s, %s, %s, %s, %s, CURDATE())
+    """, (miembro_id, planta_id, tipo_id, tipo_aporte_id, descripcion, cantidad))
     db.commit()
     cursor.close()
     db.close()
 
-    return jsonify({"resultado": "OK", "mensaje": "Aporte registrado"})
+    return jsonify({"resultado": "OK", "mensaje": "Aporte registrado"}), 201

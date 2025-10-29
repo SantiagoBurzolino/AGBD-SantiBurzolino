@@ -31,6 +31,12 @@ CREATE TABLE aportes (
     FOREIGN KEY (tipo_aporte_id) REFERENCES tipos_aporte(tipo_id)
 );
 
+CREATE TABLE tipos_aporte (
+    tipo_id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion VARCHAR(255)
+);
+
 
 CREATE TABLE miembros (
     miembro_id INT AUTO_INCREMENT PRIMARY KEY,

@@ -10,7 +10,7 @@ def test_crear_y_obtener_aporte(client):
 
     # 1️⃣ Crear un nuevo aporte
     response_post = client.post("/api/aportes", json=nuevo_aporte)
-    assert response_post.status_code == 201 or response_post.status_code == 200
+    assert response_post.status_code == 201 
     data_post = response_post.get_json()
     assert data_post.get("resultado") == "OK"
 
