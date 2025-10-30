@@ -1,69 +1,88 @@
 from flask import Blueprint, jsonify, request
 from db import get_db
 
-# Creamos la blueprint de aportes
 aportes_bp = Blueprint('aportes', __name__)
 
+# Utilidad simple: lee JSON y valida campos
+def leer_json(campos_obligatorios):
+    datos = request.get_json(silent=True)  # None si no viene JSON
+    if datos is None:
+        return None, ("El cuerpo debe ser JSON y usar Content-Type: application/json", 400)
+    for c in campos_obligatorios:
+        if c not in datos:
+            return None, (f"Falta el campo {c}", 400)
+    return datos, None
 
-# Obtener todos los aportes (admin)
+# GET /api/aportes  -> lista todos (admin o pruebas)
 @aportes_bp.route("/api/aportes", methods=["GET"])
 def obtener_aportes():
-    db = get_db()
-    cursor = db.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM aportes;")
-    resultados = cursor.fetchall()
-    cursor.close()
-    db.close()
-    return jsonify(resultados)
+    try:
+        db = get_db()
+        cursor = db.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM aportes;")
+        datos = cursor.fetchall()
+        cursor.close()
+        db.close()
+        return jsonify(datos), 200
+    except Exception as e:
+        return jsonify({"error": "Error al listar aportes", "detalle": str(e)}), 500
 
-# Obtener aportes de un miembro específico
+# GET /api/aportes/<miembro_id> -> lista por miembro
 @aportes_bp.route("/api/aportes/<int:miembro_id>", methods=["GET"])
 def obtener_aportes_por_miembro(miembro_id):
-    db = get_db()
-    cursor = db.cursor(dictionary=True)
+    try:
+        db = get_db()
+        cursor = db.cursor(dictionary=True)
+        consulta = """
+            SELECT a.id,
+                   m.nombre,
+                   m.apellido,
+                   t.nombre AS tipo_aporte,
+                   a.descripcion,
+                   a.cantidad,
+                   a.fecha_aporte
+            FROM aportes a
+            JOIN miembros m ON a.miembro_id = m.id
+            JOIN tipos_aporte t ON a.tipo_aporte_id = t.id
+            WHERE a.miembro_id = %s
+            ORDER BY a.fecha_aporte DESC;
+        """
+        cursor.execute(consulta, (miembro_id,))
+        datos = cursor.fetchall()
+        cursor.close()
+        db.close()
+        return jsonify(datos), 200
+    except Exception as e:
+        return jsonify({"error": "Error al listar aportes del miembro", "detalle": str(e)}), 500
 
-    consulta = """
-        SELECT a.id,
-               m.nombre,
-               m.apellido,
-               t.nombre AS tipo_aporte,
-               a.descripcion,
-               a.cantidad,
-               a.fecha_aporte
-        FROM aportes a
-        JOIN miembros m ON a.miembro_id = m.id
-        JOIN tipos_aporte t ON a.tipo_aporte_id = t.id
-        WHERE a.miembro_id = %s
-        ORDER BY a.fecha_aporte DESC;
-    """
-
-    cursor.execute(consulta, (miembro_id,))
-    resultados = cursor.fetchall()
-    cursor.close()
-    db.close()
-    return jsonify(resultados)
-
-
-
-# Crear un nuevo aporte (usuario)
+# POST /api/aportes -> crear aporte
 @aportes_bp.route("/api/aportes", methods=["POST"])
 def agregar_aporte():
-    datos = request.json
-    miembro_id = datos["miembro_id"]
-    planta_id = datos["planta_id"]
-    tipo_id = datos.get("tipo_id", 1)  # opcional, default 1 si no se manda
-    tipo_aporte_id = datos["tipo_aporte_id"]
-    descripcion = datos["descripcion"]
-    cantidad = datos["cantidad"]
+    try:
+        requeridos = ["miembro_id", "planta_id", "tipo_aporte_id", "descripcion", "cantidad"]
+        datos, error = leer_json(requeridos)
+        if error:
+            msg, code = error
+            return jsonify({"error": msg}), code
 
-    db = get_db()
-    cursor = db.cursor()
-    cursor.execute("""
-        INSERT INTO aportes (miembro_id, planta_id, tipo_id, tipo_aporte_id, descripcion, cantidad, fecha_aporte)
-        VALUES (%s, %s, %s, %s, %s, %s, CURDATE())
-    """, (miembro_id, planta_id, tipo_id, tipo_aporte_id, descripcion, cantidad))
-    db.commit()
-    cursor.close()
-    db.close()
+        miembro_id = datos["miembro_id"]
+        planta_id = datos["planta_id"]
+        tipo_id = datos.get("tipo_id", 1)  # opcional, por defecto 1
+        tipo_aporte_id = datos["tipo_aporte_id"]
+        descripcion = datos["descripcion"]
+        cantidad = datos["cantidad"]
 
-    return jsonify({"resultado": "OK", "mensaje": "Aporte registrado"}), 201
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute("""
+            INSERT INTO aportes (miembro_id, planta_id, tipo_id, tipo_aporte_id, descripcion, cantidad, fecha_aporte)
+            VALUES (%s, %s, %s, %s, %s, %s, CURDATE())
+        """, (miembro_id, planta_id, tipo_id, tipo_aporte_id, descripcion, cantidad))
+        db.commit()
+        nuevo_id = cursor.lastrowid
+        cursor.close()
+        db.close()
+
+        return jsonify({"resultado": "OK", "id": nuevo_id, "mensaje": "Aporte registrado"}), 201
+    except Exception as e:
+        return jsonify({"error": "No se pudo crear el aporte", "detalle": str(e)}), 500

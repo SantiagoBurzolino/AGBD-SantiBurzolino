@@ -14,7 +14,7 @@
     "mysql2": "^3.15.3",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-router-dom": "^7.9.4"
+    "react-router-dom": "^7.9.5"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.28.5",

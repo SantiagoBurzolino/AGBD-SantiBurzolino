@@ -73,6 +73,7 @@ function AdminHome() {
 
   // Handler para modificar
   const handleActualizar = async (user) => {
+    console.log("Datos que envío al backend:", user);
     const res = await fetch(`http://localhost:5000/users/${user.miembro_id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
