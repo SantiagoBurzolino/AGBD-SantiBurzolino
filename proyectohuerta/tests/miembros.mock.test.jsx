@@ -55,3 +55,7 @@ describe("Pruebas mockeadas de miembros", () => {
     expect(response.data.mensaje).toBe("Usuario eliminado");
   });
 });
+
+afterAll(() => {
+  jest.restoreAllMocks(); // Limpia todos los mocks después de las pruebas
+});
