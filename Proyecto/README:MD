@@ -28,6 +28,9 @@ source .venv/bin/activate
 pip install flask flask-cors mysql-connector-python werkzeug
 pip install python-dotenv
 
+se instala todo las dependencias de una en vez 
+pipvenv install 
+
 para instalar el npm y sus librerias
 
 npm install vite@latest
