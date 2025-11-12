@@ -1,15 +1,11 @@
-// Se eliminó la importación de "util", ya que TextEncoder y TextDecoder
-// generalmente están disponibles globalmente en el entorno de JSDOM de Jest.
-// import { TextEncoder, TextDecoder } from "util";
-// global.TextEncoder = TextEncoder;
-// global.TextDecoder = TextDecoder;
 
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import Register from "../src/components/home/homeAdmin.jsx"; // Asumo que este es el componente correcto
 
+const renderWithRouter = (ui) => render(<BrowserRouter>{ui}</BrowserRouter>);
 describe("Componente: Register", () => {
-  const renderWithRouter = (ui) => render(<BrowserRouter>{ui}</BrowserRouter>);
+  
 
   beforeEach(() => {
     // Limpiamos los mocks de fetch antes de cada test
@@ -17,6 +13,8 @@ describe("Componente: Register", () => {
     jest.spyOn(Storage.prototype, "getItem").mockReturnValue(null);
     jest.clearAllMocks(); // Limpia otros mocks si los hubiera
   });
+
+  
 
   test("Renderiza correctamente los campos del formulario", () => {
     renderWithRouter(<Register />);
