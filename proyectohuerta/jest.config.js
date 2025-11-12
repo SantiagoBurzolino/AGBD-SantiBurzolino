@@ -12,5 +12,9 @@ export default {
   collectCoverageFrom: [
     'src/**/*.{js,jsx}',
     '!src/main.jsx' // excluye el entrypoint
-  ]
+    
+  ],
+   moduleNameMapper: {
+    "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+  },
 };
